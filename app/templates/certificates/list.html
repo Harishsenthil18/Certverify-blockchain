@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Certificates{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0">Certificates</h3>
+    <a href="{{ url_for('certificates.upload_certificate') }}" class="btn btn-primary"><i class="fa-solid fa-upload me-1"></i>Upload Certificate</a>
+</div>
+
+<form method="GET" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by Certificate ID, name, or roll number...">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-secondary"><i class="fa-solid fa-magnifying-glass me-1"></i>Search</button>
+    </div>
+    {% if query %}
+    <div class="col-auto">
+        <a href="{{ url_for('certificates.list_certificates') }}" class="btn btn-link">Clear</a>
+    </div>
+    {% endif %}
+</form>
+
+<div class="card">
+    <div class="card-body p-0">
+        {% if certificates %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Certificate ID</th><th>Student</th><th>Course</th><th>Grade</th><th>Issued</th><th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cert in certificates %}
+                    <tr>
+                        <td><span class="fw-semibold">{{ cert.certificate_id }}</span></td>
+                        <td>{{ cert.student.full_name }} <span class="text-muted small">({{ cert.student.roll_number }})</span></td>
+                        <td>{{ cert.course_name }}</td>
+                        <td>{{ cert.grade }}</td>
+                        <td>{{ cert.issue_date.strftime('%d %b %Y') }}</td>
+                        <td class="text-end">
+                            <a href="{{ url_for('certificates.view_certificate', certificate_pk=cert.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted p-4 mb-0 text-center">
+            {% if query %}No certificates match "{{ query }}".{% else %}No certificates uploaded yet.{% endif %}
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

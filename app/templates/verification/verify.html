@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Verify a Certificate{% endblock %}
+{% block content %}
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Verify an Academic Certificate</h2>
+    <p class="text-muted">Check the authenticity of a certificate using its ID, or by uploading the PDF file.</p>
+</div>
+
+<div class="row justify-content-center g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold"><i class="fa-solid fa-hashtag me-2"></i>Verify by Certificate ID</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('verification.verify_by_id') }}" data-loading-form novalidate>
+                    {{ id_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ id_form.certificate_id.label(class="form-label") }}
+                        {{ id_form.certificate_id(class="form-control" + (" is-invalid" if id_form.certificate_id.errors else ""), placeholder="CERT-2026-000001") }}
+                        {% for error in id_form.certificate_id.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    {{ id_form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-white fw-semibold"><i class="fa-solid fa-file-pdf me-2"></i>Verify by Uploading PDF</div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('verification.verify_by_file') }}" enctype="multipart/form-data" data-loading-form novalidate>
+                    {{ file_form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ file_form.certificate_file.label(class="form-label") }}
+                        {{ file_form.certificate_file(class="form-control" + (" is-invalid" if file_form.certificate_file.errors else ""), accept=".pdf") }}
+                        {% for error in file_form.certificate_file.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+                    {{ file_form.submit(class="btn btn-primary w-100") }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center text-muted small mt-4">
+    <i class="fa-solid fa-lock me-1"></i>
+    Every certificate is protected by SHA-256 hashing and recorded on a tamper-evident blockchain.
+</div>
+{% endblock %}

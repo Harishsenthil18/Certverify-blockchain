@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Upload Certificate{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">
+                <i class="fa-solid fa-upload me-2"></i>Upload New Certificate
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data" data-loading-form novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        {{ form.student_id.label(class="form-label") }}
+                        {{ form.student_id(class="form-select" + (" is-invalid" if form.student_id.errors else "")) }}
+                        {% for error in form.student_id.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.course_name.label(class="form-label") }}
+                        {{ form.course_name(class="form-control" + (" is-invalid" if form.course_name.errors else ""), placeholder="e.g. B.Tech Computer Science") }}
+                        {% for error in form.course_name.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.grade.label(class="form-label") }}
+                            {{ form.grade(class="form-control" + (" is-invalid" if form.grade.errors else ""), placeholder="e.g. A+ or 8.9 CGPA") }}
+                            {% for error in form.grade.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.issue_date.label(class="form-label") }}
+                            {{ form.issue_date(class="form-control" + (" is-invalid" if form.issue_date.errors else ""), type="date") }}
+                            {% for error in form.issue_date.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.certificate_file.label(class="form-label") }}
+                        <div class="upload-dropzone">
+                            <i class="fa-solid fa-file-pdf fa-2x mb-2 text-danger"></i>
+                            <div id="selected-filename" class="small text-muted mb-2">No file selected</div>
+                            {{ form.certificate_file(class="form-control" + (" is-invalid" if form.certificate_file.errors else ""), accept=".pdf", data_filename_target="selected-filename") }}
+                        </div>
+                        <div class="form-text">PDF only, max 10 MB. The file's SHA-256 hash will be computed and recorded on the blockchain.</div>
+                        {% for error in form.certificate_file.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="alert alert-info small">
+                        <i class="fa-solid fa-circle-info me-1"></i>
+                        Uploading will generate a unique Certificate ID, compute SHA-256 hashes of the certificate data and file,
+                        add a new block to the blockchain, and generate a QR code for verification.
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('certificates.list_certificates') }}" class="btn btn-outline-secondary">Cancel</a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Admin Login{% endblock %}
+{% block content %}
+<div class="login-card">
+    <div class="card">
+        <div class="card-body p-4">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-shield-halved fa-2x mb-2" style="color: var(--brand-blue);"></i>
+                <h4 class="fw-bold mb-0">Admin Login</h4>
+                <p class="text-muted small">Academic Certificate Verification System</p>
+            </div>
+            <form method="POST" action="{{ url_for('auth.login') }}" data-loading-form novalidate>
+                {{ form.hidden_tag() }}
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else ""), autofocus=true, placeholder="admin") }}
+                    {% for error in form.username.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), placeholder="********") }}
+                    {% for error in form.password.errors %}<div class="invalid-feedback">{{ error }}</div>{% endfor %}
+                </div>
+                <div class="form-check mb-3">
+                    {{ form.remember_me(class="form-check-input") }}
+                    {{ form.remember_me.label(class="form-check-label") }}
+                </div>
+                {{ form.submit(class="btn btn-primary w-100") }}
+            </form>
+        </div>
+    </div>
+    <p class="text-center text-muted small mt-3">
+        <i class="fa-solid fa-circle-info me-1"></i>
+        Not an admin? You can still <a href="{{ url_for('verification.verify_home') }}">verify a certificate</a> without logging in.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.black-formatter",
+        "samuelcolvin.jinjahtml",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-mysql",
+        "ecmel.vscode-html-css",
+        "ritwickdey.liveserver"
+    ]
+}

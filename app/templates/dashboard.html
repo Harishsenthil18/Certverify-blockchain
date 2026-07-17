@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">Dashboard</h3>
+    <div>
+        <a href="{{ url_for('students.add_student') }}" class="btn btn-outline-primary me-2"><i class="fa-solid fa-user-plus me-1"></i>Add Student</a>
+        <a href="{{ url_for('certificates.upload_certificate') }}" class="btn btn-primary"><i class="fa-solid fa-upload me-1"></i>Upload Certificate</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="stat-card bg-students">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number">{{ total_students }}</div>
+                    <div>Total Students</div>
+                </div>
+                <i class="fa-solid fa-graduation-cap fa-2x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card bg-certificates">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number">{{ total_certificates }}</div>
+                    <div>Certificates Issued</div>
+                </div>
+                <i class="fa-solid fa-certificate fa-2x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card bg-verifications">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number">{{ total_verifications }}</div>
+                    <div>Verification Attempts</div>
+                </div>
+                <i class="fa-solid fa-magnifying-glass fa-2x opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">Recently Issued Certificates</div>
+            <div class="card-body p-0">
+                {% if recent_certificates %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr><th>Certificate ID</th><th>Student</th><th>Issued</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for cert in recent_certificates %}
+                            <tr>
+                                <td><a href="{{ url_for('certificates.view_certificate', certificate_pk=cert.id) }}">{{ cert.certificate_id }}</a></td>
+                                <td>{{ cert.student.full_name }}</td>
+                                <td>{{ cert.created_at.strftime('%d %b %Y') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted p-3 mb-0">No certificates issued yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">Recent Verification Attempts</div>
+            <div class="card-body p-0">
+                {% if recent_verifications %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr><th>Certificate ID</th><th>Method</th><th>Result</th><th>When</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for log in recent_verifications %}
+                            <tr>
+                                <td>{{ log.certificate_id or '—' }}</td>
+                                <td>{{ log.verification_method }}</td>
+                                <td>
+                                    {% if log.result == 'VALID' %}<span class="badge bg-success">Valid</span>
+                                    {% elif log.result == 'TAMPERED' %}<span class="badge bg-danger">Tampered</span>
+                                    {% else %}<span class="badge bg-warning text-dark">Not Found</span>{% endif %}
+                                </td>
+                                <td>{{ log.verified_at.strftime('%d %b %Y %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted p-3 mb-0">No verification attempts logged yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

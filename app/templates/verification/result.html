@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Verification Result{% endblock %}
+{% block content %}
+<div class="text-center mb-4">
+    {% if result == "VALID" %}
+        <div class="result-badge valid mx-auto">
+            <i class="fa-solid fa-circle-check"></i> Valid Certificate
+        </div>
+        <p class="text-muted mt-3">This certificate's data, file, and blockchain record are all consistent. It has not been tampered with.</p>
+    {% elif result == "TAMPERED" %}
+        <div class="result-badge tampered mx-auto">
+            <i class="fa-solid fa-triangle-exclamation"></i> Tampered Certificate
+        </div>
+        <p class="text-muted mt-3">This certificate does not match its original blockchain record. It may have been altered after issuance.</p>
+    {% else %}
+        <div class="result-badge not-found mx-auto">
+            <i class="fa-solid fa-circle-question"></i> Certificate Not Found
+        </div>
+        <p class="text-muted mt-3">No certificate matching this ID or file could be found in our records.</p>
+    {% endif %}
+</div>
+
+{% if certificate %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">Certificate Summary</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Certificate ID</dt>
+                    <dd class="col-sm-8">{{ certificate.certificate_id }}</dd>
+
+                    <dt class="col-sm-4">Student</dt>
+                    <dd class="col-sm-8">{{ certificate.student.full_name }}</dd>
+
+                    <dt class="col-sm-4">Course</dt>
+                    <dd class="col-sm-8">{{ certificate.course_name }}</dd>
+
+                    <dt class="col-sm-4">Grade</dt>
+                    <dd class="col-sm-8">{{ certificate.grade }}</dd>
+
+                    <dt class="col-sm-4">Issue Date</dt>
+                    <dd class="col-sm-8">{{ certificate.issue_date.strftime('%d %B %Y') }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif certificate_id %}
+<p class="text-center text-muted">Searched for: <span class="fw-semibold">{{ certificate_id }}</span></p>
+{% endif %}
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('verification.verify_home') }}" class="btn btn-outline-primary"><i class="fa-solid fa-rotate-left me-1"></i>Verify Another Certificate</a>
+</div>
+{% endblock %}

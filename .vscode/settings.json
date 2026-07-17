@@ -1,0 +1,31 @@
+{
+    "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.testing.unittestEnabled": true,
+    "python.testing.unittestArgs": ["-v", "-s", "./tests"],
+    "python.testing.pytestEnabled": false,
+    "python.analysis.extraPaths": ["${workspaceFolder}"],
+    "editor.formatOnSave": true,
+    "editor.rulers": [100],
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true
+    },
+    "files.associations": {
+        "*.html": "jinja-html"
+    },
+    "emmet.includeLanguages": {
+        "jinja-html": "html"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "[html]": {
+        "editor.formatOnSave": false
+    },
+    "[jinja-html]": {
+        "editor.formatOnSave": false
+    }
+}

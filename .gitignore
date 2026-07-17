@@ -1,0 +1,37 @@
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+htmlcov/
+venv/
+env/
+.venv/
+
+# Flask
+instance/
+
+# Uploaded files & generated artifacts (keep the folder, not its contents)
+app/uploads/certificates/*
+!app/uploads/certificates/.gitkeep
+app/static/qrcodes/*
+!app/static/qrcodes/.gitkeep
+
+# Logs
+logs/*.log*
+
+# IDE
+.vscode/*
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

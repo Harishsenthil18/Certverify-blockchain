@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}{{ certificate.certificate_id }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="fw-bold mb-0">{{ certificate.certificate_id }}</h3>
+    <a href="{{ url_for('certificates.list_certificates') }}" class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-arrow-left me-1"></i>Back</a>
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-8">
+        <div class="card mb-3">
+            <div class="card-header bg-white fw-semibold">Certificate Details</div>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Student</dt>
+                    <dd class="col-sm-8">{{ certificate.student.full_name }} ({{ certificate.student.roll_number }})</dd>
+
+                    <dt class="col-sm-4">Course</dt>
+                    <dd class="col-sm-8">{{ certificate.course_name }}</dd>
+
+                    <dt class="col-sm-4">Grade</dt>
+                    <dd class="col-sm-8">{{ certificate.grade }}</dd>
+
+                    <dt class="col-sm-4">Issue Date</dt>
+                    <dd class="col-sm-8">{{ certificate.issue_date.strftime('%d %B %Y') }}</dd>
+
+                    <dt class="col-sm-4">Uploaded On</dt>
+                    <dd class="col-sm-8">{{ certificate.created_at.strftime('%d %B %Y %H:%M') }}</dd>
+
+                    <dt class="col-sm-4">Original File</dt>
+                    <dd class="col-sm-8">
+                        {{ certificate.original_filename }}
+                        &middot; <a href="{{ url_for('certificates.download_certificate_file', certificate_pk=certificate.id) }}">Download PDF</a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">Cryptographic Record</div>
+            <div class="card-body">
+                <p class="text-muted small">These SHA-256 hashes are what tie this certificate to its blockchain block. Any change to the certificate's data or file will change these values and be detected during verification.</p>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">File Hash</dt>
+                    <dd class="col-sm-8"><span class="hash-chip">{{ certificate.file_hash }}</span></dd>
+
+                    <dt class="col-sm-4">Data Hash</dt>
+                    <dd class="col-sm-8"><span class="hash-chip">{{ certificate.data_hash }}</span></dd>
+
+                    <dt class="col-sm-4">Combined Hash</dt>
+                    <dd class="col-sm-8"><span class="hash-chip">{{ certificate.combined_hash }}</span></dd>
+
+                    <dt class="col-sm-4">Blockchain Block ID</dt>
+                    <dd class="col-sm-8">#{{ certificate.block_id }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-white fw-semibold">Verification QR Code</div>
+            <div class="card-body text-center qr-box">
+                {% if qr_filename %}
+                    <img src="{{ url_for('static', filename='qrcodes/' + qr_filename) }}" alt="QR code for {{ certificate.certificate_id }}">
+                    <p class="small text-muted mt-2 mb-0">Scan to verify this certificate instantly.</p>
+                {% else %}
+                    <p class="text-muted small mb-0">QR code not available for this certificate.</p>
+                {% endif %}
+            </div>
+        </div>
+        <a href="{{ url_for('verification.verify_by_id_direct', certificate_id=certificate.certificate_id) }}" class="btn btn-outline-primary w-100 mt-3">
+            <i class="fa-solid fa-magnifying-glass me-1"></i>Preview Verification Result
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Virtual Environment",
+            "type": "shell",
+            "command": "python -m venv venv",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Dependencies",
+            "type": "shell",
+            "command": "${workspaceFolder}/venv/bin/pip install -r requirements.txt",
+            "windows": {
+                "command": "${workspaceFolder}\\venv\\Scripts\\pip install -r requirements.txt"
+            },
+            "problemMatcher": [],
+            "dependsOn": "Create Virtual Environment"
+        },
+        {
+            "label": "Initialize Database (schema.sql)",
+            "type": "shell",
+            "command": "mysql -u root -p < database/schema.sql",
+            "problemMatcher": []
+        },
+        {
+            "label": "Load Sample Data",
+            "type": "shell",
+            "command": "mysql -u root -p < database/seed_data.sql",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Flask App",
+            "type": "shell",
+            "command": "${workspaceFolder}/venv/bin/python run.py",
+            "windows": {
+                "command": "${workspaceFolder}\\venv\\Scripts\\python run.py"
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Run All Tests",
+            "type": "shell",
+            "command": "${workspaceFolder}/venv/bin/python -m unittest discover -s tests -v",
+            "windows": {
+                "command": "${workspaceFolder}\\venv\\Scripts\\python -m unittest discover -s tests -v"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
